@@ -19,6 +19,7 @@ jobs:
           - '5.30'
     container:
       image: perl:${{ matrix.perl-version }}
+      options: --user 1001 --security-opt no-new-privileges
     steps:
       - uses: actions/checkout@v2
       - name: perl -V
@@ -30,7 +31,7 @@ jobs:
           cpanm -n Cpanel::JSON::XS EV Role::Tiny
           cpanm -n Test::Pod Test::Pod::Coverage
       - name: Run Tests
-        run: prove -l t t/mojo t/mojolicious
+        run: PERL5LIB="$HOME/perl5/lib/perl5" prove -l t t/mojo t/mojolicious
         env:
           TEST_POD: 1
           TEST_EV: 1
